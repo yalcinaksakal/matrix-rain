@@ -7,7 +7,7 @@ const createPlane = () => {
     new MeshStandardMaterial({
       color: "black",
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.4,
     })
   );
 
@@ -15,7 +15,7 @@ const createPlane = () => {
   plane.receiveShadow = true;
   plane.rotation.x = -Math.PI / 2;
   plane.material.side = DoubleSide;
-  plane.position.set(0, 0, 50);
+  plane.position.set(0, -100, 50);
   return plane;
 };
 

@@ -8,5 +8,10 @@ const thunderLoader = onLoad => {
     onLoad(buffer);
   });
 };
-
+export const rainLoader = onLoad => {
+  // load a sound and set it as the PositionalAudio object's buffer
+  audioLoader.load("rain.mp3", buffer => {
+    onLoad(buffer);
+  });
+};
 export default thunderLoader;

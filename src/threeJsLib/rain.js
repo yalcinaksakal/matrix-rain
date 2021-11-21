@@ -10,11 +10,11 @@ let rainDrops;
 export const rain = () => {
   if (!rainDrops) return;
   for (let i = 0; i < NUM_OF_DROPS; i++) {
-    if (rainDrops[i * 3 + 1] < 0) {
-      velocity[i] = -Math.random() / 5;
-      rainDrops[i * 3 + 1] = 60 + Math.random() * 20;
+    if (rainDrops[i * 3 + 1] < -100) {
+      velocity[i] = -Math.random();
+      rainDrops[i * 3 + 1] = 130 + Math.random() * 20;
     } else {
-      velocity[i] -= 0.007;
+      velocity[i] -= 0.01;
       rainDrops[i * 3 + 1] += velocity[i];
     }
     rainDrops[i * 3] -= 0.2;
@@ -27,9 +27,9 @@ const createRain = () => {
   const drops = [];
   let y;
   for (let i = 0; i < NUM_OF_DROPS; i++) {
-    y = Math.random() * 70;
+    y = Math.random() * 250 - 100;
     drops.push(Math.random() * 400 - 200, y, Math.random() * 400 - 150);
-    velocity.push((70 - y) * -0.05);
+    velocity.push((150 - y) * -0.05);
   }
 
   rainGeo.setAttribute("position", new Float32BufferAttribute(drops, 3));

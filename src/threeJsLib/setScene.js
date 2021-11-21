@@ -1,5 +1,5 @@
 import { FogExp2, PositionalAudio, Scene, AudioListener } from "three";
-import thunderLoader from "../sounds/thunder";
+import thunderLoader, { rainLoader } from "../sounds/thunder";
 import myCam from "./camera";
 import createClouds from "./clouds";
 import createPlane from "./createPlaneAndBoxes";
@@ -38,7 +38,8 @@ const setScene = () => {
   scene.add(...Object.values(lights));
 
   //add a plane
-  scene.add(createPlane());
+  const plane = createPlane();
+  scene.add(plane);
 
   //rain
   const rainDrops = createRain();
@@ -51,11 +52,7 @@ const setScene = () => {
   //sounds
   let listener;
   let thunderSound;
-  const addSoundToObj = (
-    buffer,
-    isLooping = false,
-    distanceRef = Math.random() * 500
-  ) => {
+  const addSoundToObj = (buffer, isLooping = false, distanceRef = 500) => {
     const audio = new PositionalAudio(listener);
     audio.setBuffer(buffer);
     audio.setRefDistance(distanceRef);
@@ -69,6 +66,14 @@ const setScene = () => {
     listener = new AudioListener();
     camera.add(listener);
     thunderLoader(setThundersound);
+    rainLoader(b => {
+      const audio = new PositionalAudio(listener);
+      audio.setBuffer(b);
+      audio.setRefDistance(500);
+      plane.add(audio);
+      audio.loop = true;
+      audio.play();
+    });
   };
 
   //onResize
@@ -79,7 +84,7 @@ const setScene = () => {
   };
 
   //animate
-
+  let temp;
   const animate = () => {
     if (isSound) {
       startSound();
@@ -89,16 +94,18 @@ const setScene = () => {
       cloud.rotation.z += Math.random() / 300;
     });
     //thunders
-    if (Math.random() > 0.96 || lights.flash.power > 100) {
-      if (lights.flash.power < 100)
-        lights.flash.position.set(
-          Math.random() * 500 - 250,
-          60,
-          Math.random() * 600 - 300
-        );
-      lights.flash.power =
-        50 + Math.random() * (!thunderSound?.isPlaying ? 1500 : 400);
-      if (thunderSound && lights.flash.power > 500) thunderSound.play();
+    if (Math.random() > 0.93 && !thunderSound?.isPlaying) {
+      lights.flash.position.set(
+        Math.random() * 500 - 250,
+        60,
+        Math.random() * 600 - 300
+      );
+      temp = Math.random() * 50;
+      lights.flash.power = temp > 45 ? temp + 450 : temp;
+      setTimeout(() => {
+        lights.flash.power = 10;
+      }, 500);
+      if (thunderSound && lights.flash.power > 50) thunderSound.play();
     }
     //rain
     rain();
