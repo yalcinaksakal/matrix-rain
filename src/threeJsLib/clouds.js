@@ -21,7 +21,7 @@ const createClouds = render => {
     for (let i = 0; i < NUM_OF_CLOUDS; i++) {
       cloud = new Mesh(cloudGeo, cloudMaterial);
       cloud.position.set(
-        Math.random() * 500 - 250,
+        (Math.random() * window.innerWidth) / 2 - window.innerWidth / 4,
         150,
         Math.random() * 600 - 300
       );

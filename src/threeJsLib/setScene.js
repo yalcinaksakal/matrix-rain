@@ -1,5 +1,7 @@
 import { FogExp2, PositionalAudio, Scene, AudioListener } from "three";
-import thunderLoader, { rainLoader } from "../sounds/thunder";
+import getLetter, { loadFont } from "../matrix/matrixLetter";
+import soundLoader from "../sounds/soundLoader";
+
 import myCam from "./camera";
 import createClouds from "./clouds";
 import createPlane from "./createPlaneAndBoxes";
@@ -49,31 +51,29 @@ const setScene = () => {
   //add controls
   const controls = setOrbitControls(camera, domElement);
 
+  //
+
   //sounds
   let listener;
   let thunderSound;
-  const addSoundToObj = (buffer, isLooping = false, distanceRef = 500) => {
+  const addSoundToObj = (buffer, isLooping, type, distanceRef = 500) => {
     const audio = new PositionalAudio(listener);
     audio.setBuffer(buffer);
     audio.setRefDistance(distanceRef);
     // obj.add(audio);
     audio.loop = isLooping;
-    thunderSound = audio;
+    if (type === "t") thunderSound = audio;
+    else {
+      plane.add(audio);
+      audio.play();
+    }
   };
 
-  const setThundersound = buffer => addSoundToObj(buffer);
   const startSound = () => {
     listener = new AudioListener();
     camera.add(listener);
-    thunderLoader(setThundersound);
-    rainLoader(b => {
-      const audio = new PositionalAudio(listener);
-      audio.setBuffer(b);
-      audio.setRefDistance(500);
-      plane.add(audio);
-      audio.loop = true;
-      audio.play();
-    });
+    soundLoader(addSoundToObj, "thunder.mp3");
+    soundLoader(addSoundToObj, "rain.mp3");
   };
 
   //onResize
@@ -83,9 +83,21 @@ const setScene = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
   };
 
+  //font load
+  let isFontLoaded = false;
+
+  loadFont(() => (isFontLoaded = true));
+
   //animate
   let temp;
+
   const animate = () => {
+    if (isFontLoaded) {
+      const l = getLetter();
+      l.position.set(0, -50, 0);
+      scene.add(l);
+      isFontLoaded = false;
+    }
     if (isSound) {
       startSound();
       isSound = false;

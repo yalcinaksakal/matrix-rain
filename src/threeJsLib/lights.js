@@ -16,7 +16,7 @@ const createLights = () => {
   light.shadow.camera.top = 200;
   light.shadow.camera.bottom = -200;
 
-  const flash = new PointLight(0x062d89, 30, 500, 1.7);
+  const flash = new PointLight(0x062d89, 1, 500);
   flash.position.set(0, 90, 0);
   return { ambient: new AmbientLight(0x555555), flash };
 };
