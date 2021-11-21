@@ -1,4 +1,5 @@
-import { FogExp2, Scene } from "three";
+import { FogExp2, PositionalAudio, Scene, AudioListener } from "three";
+import thunderLoader from "../sounds/thunder";
 import myCam from "./camera";
 import createClouds from "./clouds";
 import createPlane from "./createPlaneAndBoxes";
@@ -6,7 +7,8 @@ import createLights from "./lights";
 import createRain, { rain } from "./rain";
 import createR from "./renderer";
 import setOrbitControls from "./setOrbitControls";
-
+export let isSound = false;
+export const setIsSound = () => (isSound = true);
 const setScene = () => {
   //renderer
   const renderer = createR();
@@ -30,6 +32,7 @@ const setScene = () => {
   //   "skybox/front.png",
   //   "skybox/back.png",
   // ]);
+
   //lights
   const lights = createLights();
   scene.add(...Object.values(lights));
@@ -45,6 +48,29 @@ const setScene = () => {
   //add controls
   const controls = setOrbitControls(camera, domElement);
 
+  //sounds
+  let listener;
+  let thunderSound;
+  const addSoundToObj = (
+    buffer,
+    isLooping = false,
+    distanceRef = Math.random() * 500
+  ) => {
+    const audio = new PositionalAudio(listener);
+    audio.setBuffer(buffer);
+    audio.setRefDistance(distanceRef);
+    // obj.add(audio);
+    audio.loop = isLooping;
+    thunderSound = audio;
+  };
+
+  const setThundersound = buffer => addSoundToObj(buffer);
+  const startSound = () => {
+    listener = new AudioListener();
+    camera.add(listener);
+    thunderLoader(setThundersound);
+  };
+
   //onResize
   const onResize = () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -55,18 +81,24 @@ const setScene = () => {
   //animate
 
   const animate = () => {
+    if (isSound) {
+      startSound();
+      isSound = false;
+    }
     clouds.children.forEach(cloud => {
       cloud.rotation.z += Math.random() / 300;
     });
     //thunders
-    if (Math.random() > 0.93 || lights.flash.power > 100) {
+    if (Math.random() > 0.96 || lights.flash.power > 100) {
       if (lights.flash.power < 100)
         lights.flash.position.set(
           Math.random() * 500 - 250,
-          40,
-          Math.random() * 600 - 500
+          60,
+          Math.random() * 600 - 300
         );
-      lights.flash.power = 50 + Math.random() * 500;
+      lights.flash.power =
+        50 + Math.random() * (!thunderSound?.isPlaying ? 1500 : 400);
+      if (thunderSound && lights.flash.power > 500) thunderSound.play();
     }
     //rain
     rain();
@@ -79,7 +111,7 @@ const setScene = () => {
   //init
   const clouds = createClouds(animate);
   scene.add(clouds);
-  return { domElement, onResize };
+  return { domElement, onResize, startSound };
 };
 
 export default setScene;

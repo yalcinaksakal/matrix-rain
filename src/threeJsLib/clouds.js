@@ -21,11 +21,10 @@ const createClouds = render => {
       cloud = new Mesh(cloudGeo, cloudMaterial);
       cloud.position.set(
         Math.random() * 500 - 250,
-        40,
-        Math.random() * 600 - 500
+        80,
+        Math.random() * 600 - 300
       );
       cloud.rotation.x = (Math.PI / 2) * 0.8;
-      cloud.castShadow = true;
       cloud.material.opacity = 0.6;
       clouds.add(cloud);
     }

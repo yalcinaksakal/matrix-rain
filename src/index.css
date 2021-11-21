@@ -12,3 +12,19 @@ body {
   height: 100%;
   box-sizing: border-box;
 }
+button {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 100;
+  transform: translate(-50%, -50%);
+  background: #02794a;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  text-align: center;
+  transition: all ease-out 0.2s;
+}
+button:hover {
+  background: #129f66;
+}

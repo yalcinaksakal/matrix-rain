@@ -1,23 +1,9 @@
-import { useEffect, useRef } from "react";
-import setScene from "./threeJsLib/setScene";
+import { useState } from "react";
+import Canvas from "./Canvas";
+import { setIsSound } from "./threeJsLib/setScene";
 
 function App() {
-  const rendererRef = useRef();
-
-  useEffect(() => {
-    const { domElement, onResize } = setScene();
-    rendererRef.current.appendChild(domElement);
-
-    // resize;
-    window.addEventListener("resize", onResize);
-
-    // cleanup
-    return () => {
-      window.removeEventListener("resize", onResize);
-      domElement.remove();
-    };
-  }, []);
-
+  const [start, setStart] = useState(false);
   return (
     <>
       <p
@@ -35,16 +21,17 @@ function App() {
         <br />
         Zoom in out enabled.
       </p>
-      <div
-        ref={rendererRef}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          height: "100%",
-        }}
-      ></div>
+      <Canvas />
+      {!start && (
+        <button
+          onClick={() => {
+            setStart(true);
+            setIsSound();
+          }}
+        >
+          START
+        </button>
+      )}
     </>
   );
 }

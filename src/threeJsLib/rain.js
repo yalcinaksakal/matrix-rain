@@ -4,7 +4,7 @@ import {
   Points,
   PointsMaterial,
 } from "three";
-const NUM_OF_DROPS = 400 * 150;
+const NUM_OF_DROPS = 400 * 200;
 const velocity = [];
 let rainDrops;
 export const rain = () => {
@@ -12,30 +12,30 @@ export const rain = () => {
   for (let i = 0; i < NUM_OF_DROPS; i++) {
     if (rainDrops[i * 3 + 1] < 0) {
       velocity[i] = -Math.random() / 5;
-      rainDrops[i * 3 + 1] = 60;
+      rainDrops[i * 3 + 1] = 60 + Math.random() * 20;
     } else {
-      velocity[i] -= 0.005;
+      velocity[i] -= 0.007;
       rainDrops[i * 3 + 1] += velocity[i];
     }
+    rainDrops[i * 3] -= 0.2;
+    if (rainDrops[i * 3] < -200) rainDrops[i * 3] = 200;
   }
 };
 
 const createRain = () => {
   const rainGeo = new BufferGeometry();
   const drops = [];
+  let y;
   for (let i = 0; i < NUM_OF_DROPS; i++) {
-    drops.push(
-      Math.random() * 400 - 200,
-      Math.random() * 60,
-      Math.random() * 150 - 25
-    );
-    velocity.push(0);
+    y = Math.random() * 70;
+    drops.push(Math.random() * 400 - 200, y, Math.random() * 400 - 150);
+    velocity.push((70 - y) * -0.05);
   }
 
   rainGeo.setAttribute("position", new Float32BufferAttribute(drops, 3));
   rainDrops = rainGeo.attributes.position.array;
   const rainMaterial = new PointsMaterial({
-    color: 0xaaaaaa,
+    color: "whitesmoke",
     size: 0.05,
     transparent: true,
     opacity: 0.3,
