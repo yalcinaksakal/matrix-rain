@@ -7,7 +7,7 @@ const createPlane = () => {
     new MeshStandardMaterial({
       color: "black",
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.3,
     })
   );
 

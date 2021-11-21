@@ -3,7 +3,7 @@ import myCam from "./camera";
 import createClouds from "./clouds";
 import createPlane from "./createPlaneAndBoxes";
 import createLights from "./lights";
-import createRain from "./rain";
+import createRain, { rain } from "./rain";
 import createR from "./renderer";
 import setOrbitControls from "./setOrbitControls";
 
@@ -18,6 +18,18 @@ const setScene = () => {
   scene.fog = new FogExp2(0x11111f, 0.002);
   renderer.setClearColor(scene.fog.color);
 
+  //bg
+
+  // scene.background = new CubeTextureLoader().load([
+  //   "skybox/right.png",
+  //   "skybox/left.png",
+
+  //   "skybox/top.png",
+  //   "skybox/bottom.png",
+
+  //   "skybox/front.png",
+  //   "skybox/back.png",
+  // ]);
   //lights
   const lights = createLights();
   scene.add(...Object.values(lights));
@@ -56,6 +68,9 @@ const setScene = () => {
         );
       lights.flash.power = 50 + Math.random() * 500;
     }
+    //rain
+    rain();
+    rainDrops.geometry.attributes.position.needsUpdate = true;
     renderer.render(scene, camera);
     controls.update();
     requestAnimationFrame(animate);
