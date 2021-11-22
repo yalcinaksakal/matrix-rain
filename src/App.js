@@ -15,11 +15,9 @@ function App() {
           fontSize: "10px",
         }}
       >
-        Left click (touch) rotates.
+        Left click (touch) to rotate
         <br />
-        Right click (two touches) pans the camera.
-        <br />
-        Zoom in out enabled.
+        Zoom
       </p>
       <Canvas />
       {!start && (

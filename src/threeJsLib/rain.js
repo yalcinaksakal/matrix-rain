@@ -8,13 +8,14 @@ let NUM_OF_DROPS = 400 * 150;
 // let size = NUM_OF_DROPS;
 const velocity = [];
 let rainDrops;
+
 export const rain = () => {
   if (!rainDrops) return;
   // if (NUM_OF_DROPS > 0) NUM_OF_DROPS -= 300;
   for (let i = 0; i < NUM_OF_DROPS; i++) {
     if (rainDrops[i * 3 + 1] < -100) {
       velocity[i] = -Math.random();
-      rainDrops[i * 3 + 1] = 130 + Math.random() * 20;
+      rainDrops[i * 3 + 1] = 120 + Math.random() * 80;
     } else {
       velocity[i] -= 0.01;
       rainDrops[i * 3 + 1] += velocity[i];

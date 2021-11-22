@@ -1,8 +1,10 @@
 import { FogExp2, PositionalAudio, Scene, AudioListener } from "three";
-import getLetter, { loadFont } from "../matrix/matrixLetter";
+import Matrix, { getRandomLoc } from "../matrix/matrix";
+import { loadFont } from "../matrix/matrixLetter";
 import soundLoader from "../sounds/soundLoader";
 
 import myCam from "./camera";
+// import cloudLoader from "./cloudGLTF";
 import createClouds from "./clouds";
 // import cloudLoader from "./cloudsGLTF";
 import createPlane from "./createPlaneAndBoxes";
@@ -21,11 +23,11 @@ const setScene = () => {
   //scene
   const scene = new Scene();
   //fog
-  scene.fog = new FogExp2(0x11111f, 0.002);
+  scene.fog = new FogExp2(0x11111f, 0.0015);
   renderer.setClearColor(scene.fog.color);
 
   //bg
-
+  // scene.background = new Color(0x11111f);
   // scene.background = new CubeTextureLoader().load([
   //   "skybox/right.png",
   //   "skybox/left.png",
@@ -38,7 +40,7 @@ const setScene = () => {
   // ]);
 
   //lights
-  const lights = createLights();
+  const lights = createLights(moon => scene.add(moon));
   scene.add(...Object.values(lights));
 
   //add a plane
@@ -54,6 +56,7 @@ const setScene = () => {
   const controls = setOrbitControls(camera, domElement);
 
   //clouds
+
   // let clouds, cloudsDir;
   // const onCloudsReady = (c, cD) => {
   //   clouds = c;
@@ -69,7 +72,7 @@ const setScene = () => {
     const audio = new PositionalAudio(listener);
     audio.setBuffer(buffer);
     audio.setRefDistance(distanceRef);
-    audio.setVolume(0.5);
+    // audio.setVolume(0.5);
     audio.loop = isLooping;
     if (type === "t") thunderSound = audio;
     else {
@@ -103,15 +106,22 @@ const setScene = () => {
     scene.add(lightning);
   });
   //animate
-  let temp, x, z;
+  let temp, x, z, matrix;
 
+  const numOfMatrix = 10;
   const animate = () => {
     if (isFontLoaded) {
-      const l = getLetter();
-      l.position.set(0, -50, 0);
-      scene.add(l);
+      matrix = [];
+      for (let i = 0; i < numOfMatrix; i++) {
+        matrix.push(new Matrix(...getRandomLoc()));
+        scene.add(...matrix[i].letters);
+      }
       isFontLoaded = false;
     }
+    if (matrix)
+      for (let i = 0; i < numOfMatrix; i++)
+        if (!matrix[i].move()) matrix[i].setXZ();
+
     if (isSound) {
       startSound();
       isSound = false;
@@ -135,12 +145,19 @@ const setScene = () => {
           lights.flash.power = 40;
         }, 700);
         if (lightning) {
+          for (let i = 0; i < numOfMatrix; i++) {
+            matrix[i].setXZ(
+              x + Math.random() * 30 - 15,
+              z + Math.random() * 30 - 15
+            );
+          }
           lightning.position.set(x, 0, z);
           lightning.rotateY(Math.PI / (Math.random() * 10));
           lightning.visible = true;
+
           setTimeout(() => {
             lightning.visible = false;
-          }, 300);
+          }, 700);
         }
         thunderSound.play();
       }
