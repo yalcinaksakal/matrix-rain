@@ -4,7 +4,9 @@ import soundLoader from "../sounds/soundLoader";
 
 import myCam from "./camera";
 import createClouds from "./clouds";
+// import cloudLoader from "./cloudsGLTF";
 import createPlane from "./createPlaneAndBoxes";
+import lightningLoader from "./lightningGLTF";
 import createLights from "./lights";
 import createRain, { rain } from "./rain";
 import createR from "./renderer";
@@ -51,8 +53,15 @@ const setScene = () => {
   //add controls
   const controls = setOrbitControls(camera, domElement);
 
-  //
-
+  //clouds
+  // let clouds, cloudsDir;
+  // const onCloudsReady = (c, cD) => {
+  //   clouds = c;
+  //   cloudsDir = cD;
+  //   scene.add(clouds);
+  //   animate();
+  // };
+  // cloudLoader(onCloudsReady);
   //sounds
   let listener;
   let thunderSound;
@@ -60,7 +69,7 @@ const setScene = () => {
     const audio = new PositionalAudio(listener);
     audio.setBuffer(buffer);
     audio.setRefDistance(distanceRef);
-    // obj.add(audio);
+    audio.setVolume(0.5);
     audio.loop = isLooping;
     if (type === "t") thunderSound = audio;
     else {
@@ -85,11 +94,16 @@ const setScene = () => {
 
   //font load
   let isFontLoaded = false;
-
   loadFont(() => (isFontLoaded = true));
 
+  //lightning
+  let lightning;
+  lightningLoader(l => {
+    lightning = l;
+    scene.add(lightning);
+  });
   //animate
-  let temp;
+  let temp, x, z;
 
   const animate = () => {
     if (isFontLoaded) {
@@ -102,22 +116,34 @@ const setScene = () => {
       startSound();
       isSound = false;
     }
-    clouds.children.forEach(cloud => {
-      cloud.rotation.z += Math.random() / 300;
+    clouds.children.forEach((cloud, index) => {
+      cloud.rotation.z += (cloudsDir[index] * Math.random()) / 50;
     });
     //thunders
     if (Math.random() > 0.93 && !thunderSound?.isPlaying) {
-      lights.flash.position.set(
-        Math.random() * 500 - 250,
-        60,
-        Math.random() * 600 - 300
-      );
+      x = Math.random() * 500 - 250;
+      z = Math.random() * 400 - 200;
+      lights.flash.position.set(x, 60, z);
       temp = Math.random() * 50;
       lights.flash.power = temp > 45 ? temp + 450 : temp;
-      setTimeout(() => {
-        lights.flash.power = 10;
-      }, 500);
-      if (thunderSound && lights.flash.power > 50) thunderSound.play();
+
+      if (thunderSound && lights.flash.power > 50) {
+        setTimeout(() => {
+          lights.flash.power = 300;
+        }, 300);
+        setTimeout(() => {
+          lights.flash.power = 40;
+        }, 700);
+        if (lightning) {
+          lightning.position.set(x, 0, z);
+          lightning.rotateY(Math.PI / (Math.random() * 10));
+          lightning.visible = true;
+          setTimeout(() => {
+            lightning.visible = false;
+          }, 300);
+        }
+        thunderSound.play();
+      }
     }
     //rain
     rain();
@@ -128,7 +154,7 @@ const setScene = () => {
   };
 
   //init
-  const clouds = createClouds(animate);
+  const [clouds, cloudsDir] = createClouds(animate);
   scene.add(clouds);
   return { domElement, onResize, startSound };
 };

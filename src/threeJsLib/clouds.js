@@ -6,7 +6,7 @@ import {
   TextureLoader,
 } from "three";
 const NUM_OF_CLOUDS = 20;
-
+const cloudDir = [];
 const createClouds = render => {
   let loader = new TextureLoader();
   const clouds = new Group();
@@ -27,10 +27,11 @@ const createClouds = render => {
       );
       cloud.rotation.x = (Math.PI / 2) * 0.7;
       cloud.material.opacity = 0.6;
+      cloudDir.push(Math.random() > 0.5 ? 1 : -1);
       clouds.add(cloud);
     }
     render();
   });
-  return clouds;
+  return [clouds, cloudDir];
 };
 export default createClouds;

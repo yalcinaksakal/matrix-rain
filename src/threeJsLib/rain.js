@@ -4,11 +4,13 @@ import {
   Points,
   PointsMaterial,
 } from "three";
-const NUM_OF_DROPS = 400 * 150;
+let NUM_OF_DROPS = 400 * 150;
+// let size = NUM_OF_DROPS;
 const velocity = [];
 let rainDrops;
 export const rain = () => {
   if (!rainDrops) return;
+  // if (NUM_OF_DROPS > 0) NUM_OF_DROPS -= 300;
   for (let i = 0; i < NUM_OF_DROPS; i++) {
     if (rainDrops[i * 3 + 1] < -100) {
       velocity[i] = -Math.random();
