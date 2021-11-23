@@ -150,7 +150,7 @@ const setScene = () => {
       isSound = false;
     }
     clouds.children.forEach((cloud, index) => {
-      cloud.rotation.z += (cloudsDir[index] * Math.random()) / 50;
+      cloud.rotation.z += (cloudsDir[index] * Math.random()) / 90;
     });
     //thunders
     if (Math.random() > 0.93 && !thunderSound?.isPlaying) {
