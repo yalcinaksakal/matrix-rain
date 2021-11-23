@@ -21,8 +21,8 @@ const createClouds = render => {
     for (let i = 0; i < NUM_OF_CLOUDS; i++) {
       cloud = new Mesh(cloudGeo, cloudMaterial);
       cloud.position.set(
-        (Math.random() * window.innerWidth) / 2 - window.innerWidth / 3.8,
-        180,
+        (Math.random() * window.innerWidth) / 2 - window.innerWidth / 4,
+        200,
         Math.random() * 600 - 400
       );
       cloud.rotation.x = (Math.PI / 2) * 0.7;
