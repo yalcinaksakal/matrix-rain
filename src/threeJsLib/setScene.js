@@ -1,4 +1,4 @@
-import { FogExp2, PositionalAudio, Scene, AudioListener } from "three";
+import { PositionalAudio, Scene, AudioListener, Fog } from "three";
 import Matrix, { getRandomLoc } from "../matrix/matrix";
 import { loadFont } from "../matrix/matrixLetter";
 import soundLoader from "../sounds/soundLoader";
@@ -23,7 +23,8 @@ const setScene = () => {
   //scene
   const scene = new Scene();
   //fog
-  scene.fog = new FogExp2(0x11111f, 0.0015);
+
+  scene.fog = new Fog(0x11111f, 600, 800);
   renderer.setClearColor(scene.fog.color);
 
   //bg
