@@ -4,7 +4,7 @@ import {
   Points,
   PointsMaterial,
 } from "three";
-let NUM_OF_DROPS = (window.innerWidth < 400 ? 100 : 300) * 150;
+let NUM_OF_DROPS = (window.innerWidth < 400 ? 50 : 200) * 150;
 // let size = NUM_OF_DROPS;
 const velocity = [];
 let rainDrops;
