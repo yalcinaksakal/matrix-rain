@@ -4,9 +4,9 @@ import { loadFont } from "../matrix/matrixLetter";
 import soundLoader from "../sounds/soundLoader";
 
 import myCam from "./camera";
-// import cloudLoader from "./cloudGLTF";
+
 import createClouds from "./clouds";
-// import cloudLoader from "./cloudsGLTF";
+// import cloudLoader from "./cloudGLTF";
 import createPlane from "./createPlaneAndBoxes";
 import lightningLoader from "./lightningGLTF";
 import createLights from "./lights";
@@ -70,6 +70,7 @@ const setScene = () => {
   //   scene.add(clouds);
   //   animate();
   // };
+
   // cloudLoader(onCloudsReady);
   //sounds
   let listener;
