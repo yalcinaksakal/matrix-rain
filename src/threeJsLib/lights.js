@@ -3,6 +3,7 @@ import {
   Mesh,
   MeshBasicMaterial,
   PointLight,
+  // PointLightHelper,
   SphereBufferGeometry,
   TextureLoader,
 } from "three";
@@ -43,10 +44,11 @@ const createLights = appender => {
     appender(pl);
   });
 
-  // const pointLightHelper = new PointLightHelper(light, 5);
+  // const pointLightHelper = new PointLightHelper(pl, 50);
   return {
     ambient: new AmbientLight(0x555555),
     flash,
+    // pointLightHelper,
   };
 };
 

@@ -40,7 +40,11 @@ const setScene = () => {
   // ]);
 
   //lights
-  const lights = createLights(moon => scene.add(moon));
+  let moon;
+  const lights = createLights(m => {
+    scene.add(m);
+    moon = m;
+  });
   scene.add(...Object.values(lights));
 
   //add a plane
@@ -109,6 +113,7 @@ const setScene = () => {
   let temp, x, z, matrix;
 
   const numOfMatrix = 10;
+  let shakeMoon = false;
   const animate = () => {
     if (isFontLoaded) {
       matrix = [];
@@ -118,6 +123,15 @@ const setScene = () => {
       }
       isFontLoaded = false;
     }
+    if (shakeMoon && moon) {
+      moon.position.set(
+        -window.innerWidth / 3 + Math.random() * 6 - 3,
+        140 + Math.random() * 6 - 3,
+        Math.random() * 6 - 3
+      );
+      moon.intensity = 0;
+    }
+
     if (matrix)
       for (let i = 0; i < numOfMatrix; i++)
         if (!matrix[i].move()) matrix[i].setXZ();
@@ -151,12 +165,18 @@ const setScene = () => {
               z + Math.random() * 30 - 15
             );
           }
+          shakeMoon = true;
           lightning.position.set(x, 0, z);
           lightning.rotateY(Math.PI / (Math.random() * 10));
           lightning.visible = true;
 
           setTimeout(() => {
             lightning.visible = false;
+            shakeMoon = false;
+            if (moon) {
+              moon.position.set(-window.innerWidth / 3, 140, 0);
+              moon.intensity = 100;
+            }
           }, 700);
         }
         thunderSound.play();
