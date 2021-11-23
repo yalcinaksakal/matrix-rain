@@ -1,4 +1,4 @@
-import { PositionalAudio, Scene, AudioListener, Fog } from "three";
+import { PositionalAudio, Scene, AudioListener, Fog, Color } from "three";
 import Matrix, { getRandomLoc } from "../matrix/matrix";
 import { loadFont } from "../matrix/matrixLetter";
 import soundLoader from "../sounds/soundLoader";
@@ -41,10 +41,11 @@ const setScene = () => {
   // ]);
 
   //lights
-  let moon;
-  const lights = createLights(m => {
+  let moon, moonItself;
+  const lights = createLights((m, m1) => {
     scene.add(m);
     moon = m;
+    moonItself = m1;
   });
   scene.add(...Object.values(lights));
 
@@ -112,7 +113,8 @@ const setScene = () => {
   });
   //animate
   let temp, x, z, matrix;
-
+  const color1 = new Color("#7DF9FF");
+  const color2 = new Color("#03a062");
   const numOfMatrix = 10;
   let shakeMoon = false;
   const animate = () => {
@@ -172,6 +174,7 @@ const setScene = () => {
             );
           }
           shakeMoon = true;
+          if (moonItself) moonItself.material.color = color1;
           lightning.position.set(x, 0, z);
           lightning.rotateY(Math.PI / (Math.random() * 10));
           lightning.visible = true;
@@ -182,6 +185,7 @@ const setScene = () => {
             if (moon) {
               moon.position.set(-window.innerWidth / 3, 140, 0);
               moon.intensity = 100;
+              moonItself.material.color = color2;
             }
           }, 700);
         }

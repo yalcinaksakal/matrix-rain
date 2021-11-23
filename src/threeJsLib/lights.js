@@ -41,7 +41,7 @@ const createLights = appender => {
     const moon = new Mesh(geometry, material);
     pl.position.set(-window.innerWidth / 3, 140, 0);
     pl.add(moon);
-    appender(pl);
+    appender(pl, moon);
   });
 
   // const pointLightHelper = new PointLightHelper(pl, 50);
