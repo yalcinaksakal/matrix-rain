@@ -130,6 +130,11 @@ const setScene = () => {
         Math.random() * 6 - 3
       );
       moon.intensity = 0;
+      moon.rotation.set(
+        (2 * Math.PI) / (Math.random() * 5),
+        (2 * Math.PI) / (Math.random() * 5),
+        (2 * Math.PI) / (Math.random() * 5)
+      );
     }
 
     if (matrix)
