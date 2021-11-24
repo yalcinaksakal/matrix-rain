@@ -154,8 +154,11 @@ const setScene = () => {
     });
     //thunders
     if (Math.random() > 0.93 && !thunderSound?.isPlaying) {
-      x = Math.random() * 500 - 250;
-      z = Math.random() * 400 - 200;
+      x = getRandomLoc();
+      z = x[2];
+      x = x[0];
+      // x = Math.random() * 500 - 250;
+      // z = Math.random() * 400 - 200;
       lights.flash.position.set(x, 60, z);
       temp = Math.random() * 50;
       lights.flash.power = temp > 45 ? temp + 450 : temp;
